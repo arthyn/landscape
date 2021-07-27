@@ -1,0 +1,15 @@
+.circle-button {
+  @apply inline-flex items-center justify-center h-12 w-12 font-semibold rounded-full;
+}
+
+.bg-avatar {
+	background-image: url('https://d2w9rnfcy7mm78.cloudfront.net/9137771/original_9db03738b0a1bd7aa889873fcca5c5a3.png?1602866620?bc=0');
+	background-size: cover;
+	background-position: center;
+}
+
+.bg-avatar-britney {
+	background-image: url('https://d2w9rnfcy7mm78.cloudfront.net/12231200/original_187dd63b10ceda0ad6ae320f63218c45.png?1623359413?bc=0');
+	background-size: cover;
+	background-position: center;
+}
