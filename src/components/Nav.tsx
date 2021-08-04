@@ -1,5 +1,5 @@
 import classnames from "classnames"
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation } from "wouter-preact"
 import qs from 'query-string'
 import { FunctionComponent } from "preact"
 import { useRef, useEffect } from 'preact/hooks'
@@ -18,9 +18,8 @@ const menuImages: Record<MenuState, string> = {
 
 export const Nav: FunctionComponent = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { push } = useHistory();
-  const { search } = useLocation();
-  const query = qs.parse(search);
+  const [, setLocation] = useLocation();
+  const query = qs.parse(window.location.search);
   const menuState = (query?.leap || 'closed') as MenuState;
   const isOpen = menuState !== 'closed';
 
@@ -44,10 +43,7 @@ export const Nav: FunctionComponent = () => {
     e.stopPropagation();
 
     const leap = state === 'closed' ? undefined : state;
-    push({
-      pathname: '/',
-      search: qs.stringify({ leap })
-    })
+    setLocation(leap ? `/?${qs.stringify({ leap })}` : '/');
   }
 
   const profileClassnames = classnames({

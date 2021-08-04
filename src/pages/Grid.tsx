@@ -3,6 +3,8 @@ import { Nav } from "../components/Nav"
 import { Tile } from "../components/Tile"
 import systemUrl from '../assets/system.png'
 import goUrl from '../assets/go.png'
+import { Route } from "wouter-preact"
+import { AppInfoDialog } from "../components/AppInfoDialog"
 
 export const Grid: FunctionComponent = () => {
   return (
@@ -26,6 +28,9 @@ export const Grid: FunctionComponent = () => {
           <Tile color='#FDA1FF' name='Uniswap' href='/apps/uniswap'/>
           <Tile color='#FEFFBA' name='Inbox' href='/apps/inbox'/>
         </div>
+        <Route path="/app-info/:appId">
+          <AppInfoDialog />
+        </Route>
       </main>
     </div>
   )
