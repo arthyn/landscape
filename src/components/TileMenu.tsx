@@ -1,6 +1,8 @@
+import React, { FunctionComponent, PropsWithChildren, useState } from 'react';
+import * as Menu from '@radix-ui/react-menu';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import classNames from 'classnames';
-import { darken, desaturate } from 'color2k';
+import { darken, desaturate, hsla, lighten, parseToHsla, readableColorIsBlack } from 'color2k';
 
 export interface TileMenuProps {
   id: string;
@@ -16,39 +18,49 @@ const MenuIcon = ({ className }: { className: string }) => (
   </svg>
 )
 
-function getMenuColor(color: string): string {
-  return darken(desaturate(color, .15), .075);
+function getMenuColor(color: string, light: boolean): string {
+  const hslaColor = parseToHsla(color);
+  const satAdjustedColor = hsla(hslaColor[0], Math.max(.2, hslaColor[1]), hslaColor[2], 1);
+
+  return light ? darken(satAdjustedColor, .10) : lighten(satAdjustedColor, .10);
 }
 
+const Item = React.forwardRef<HTMLDivElement, PropsWithChildren<Menu.MenuItemOwnProps>>(({ children, ...props }, ref) => (
+  <DropdownMenu.Item className="px-4 py-1 leading-none mix-blend-hard-light select-none" {...props} ref={ref}>
+    { children }
+  </DropdownMenu.Item>
+))
+
 export const TileMenu = ({ color, className }: TileMenuProps) => {
-  const menuColor = getMenuColor(color);
+  const [open, setOpen] = useState(false);
+  const light = readableColorIsBlack(color);
+  const menuColor = getMenuColor(color, light);
+  const menuBg = { backgroundColor: menuColor };
 
   return (
-    <DropdownMenu.Root>
+    <DropdownMenu.Root open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
       <DropdownMenu.Trigger
-        className={classNames('p-3 rounded-full', className)}
-        style={{ backgroundColor: menuColor }}
+        className={classNames(
+          'flex items-center justify-center w-8 h-8 rounded-full transition-opacity duration-75',
+          open && 'opacity-100',
+          className
+        )}
+        style={menuBg}
       >
-        <MenuIcon className="w-6 h-6" />
+        <MenuIcon className={classNames('w-4 h-4 mix-blend-hard-light', !light && 'text-gray-100')} />
         <span className="sr-only">Menu</span>
       </DropdownMenu.Trigger>
 
-      <DropdownMenu.Content>
-        <DropdownMenu.Group>
-          <DropdownMenu.Item>
-            App Info
-          </DropdownMenu.Item>
+      <DropdownMenu.Content sideOffset={4} className={classNames('min-w-[200px] p-4 space-y-4 font-semibold text-gray-800 rounded-xl', !light && 'text-gray-300')} style={menuBg}>
+        <DropdownMenu.Group className="space-y-4">
+          <Item>App Info</Item>
         </DropdownMenu.Group>
-        <DropdownMenu.Separator />
-        <DropdownMenu.Group>
-          <DropdownMenu.Item>
-            Suspend App
-          </DropdownMenu.Item>
-          <DropdownMenu.Item>
-            Remove App
-          </DropdownMenu.Item>
+        <DropdownMenu.Separator className="-mx-4 my-2 border-t-2 border-solid border-gray-500 mix-blend-soft-light"/>
+        <DropdownMenu.Group className="space-y-4">
+          <Item>Suspend App</Item>
+          <Item>Remove App</Item>
         </DropdownMenu.Group>
-        <DropdownMenu.Arrow />
+        <DropdownMenu.Arrow className="w-4 h-[10px] fill-current" style={{ color: menuColor }}/>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   );

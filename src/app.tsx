@@ -1,6 +1,6 @@
+import React, { useEffect } from 'react'
 import Mousetrap from 'mousetrap'
-import { Route } from 'wouter-preact'
-import { useEffect } from 'preact/hooks'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { Grid } from './pages/Grid'
 
 export function App() {
@@ -13,8 +13,12 @@ export function App() {
   }, [])
 
   return (
-    <Route path="/">
-      <Grid />
-    </Route>
+    <BrowserRouter>
+      <Switch>
+        <Route path="/">
+          <Grid />
+        </Route>
+      </Switch>
+    </BrowserRouter>
   )
 }

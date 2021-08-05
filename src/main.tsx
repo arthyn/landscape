@@ -1,5 +1,11 @@
-import { render } from 'preact'
+import React from 'react'
+import ReactDOM from 'react-dom'
 import { App } from './app'
 import './styles/index.css'
 
-render(<App />, document.getElementById('app')!)
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>, 
+  document.getElementById('app')
+)

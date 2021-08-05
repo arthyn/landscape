@@ -10,7 +10,6 @@ module.exports = {
         washedGray: 'rgba(0, 0, 0, 0.04)',
         lightGray: 'rgba(0, 0, 0, 0.2)',
         silver: 'rgba(0,0,0, 0.1)',
-        gray: 'rgba(0, 0, 0, 0.6)',
         midWhite:'rgba(255, 255, 255, 0.7)',
         lightWhite:'rgba(255, 255, 255, 0.4)',
         washedWhite:'rgba(255, 255, 255, 0.15)',

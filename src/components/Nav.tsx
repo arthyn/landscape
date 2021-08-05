@@ -1,8 +1,7 @@
+import React, { FunctionComponent, useRef, useEffect, MouseEvent } from "react"
 import classnames from "classnames"
-import { useLocation } from "wouter-preact"
+import { useHistory, useLocation } from "react-router-dom"
 import qs from 'query-string'
-import { FunctionComponent } from "preact"
-import { useRef, useEffect } from 'preact/hooks'
 import profileUrl from '../assets/profile.png'
 import notificationsUrl from '../assets/notifications.png'
 import searchUrl from '../assets/search.png'
@@ -18,8 +17,9 @@ const menuImages: Record<MenuState, string> = {
 
 export const Nav: FunctionComponent = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [, setLocation] = useLocation();
-  const query = qs.parse(window.location.search);
+  const { push } = useHistory();
+  const { search } = useLocation();
+  const query = qs.parse(search);
   const menuState = (query?.leap || 'closed') as MenuState;
   const isOpen = menuState !== 'closed';
 
@@ -32,18 +32,20 @@ export const Nav: FunctionComponent = () => {
   useEffect(() => {
     if (typeof document !== "undefined") {
       if (isOpen) {
-        document.body.className = 'overflow-hidden pr-[15px]';
+        document.body.classList.add('overflow-hidden', 'pr-[15px]')
+        document.body.classList.remove('overflow-visible') 
       } else {
-        document.body.className = 'overflow-visible';
+        document.body.classList.add('overflow-visible')
+        document.body.classList.remove('overflow-hidden', 'pr-[15px]') 
       }
     }
   }, [isOpen])
 
-  function toggleMenu(e: MouseEvent, state: MenuState) {
+  function toggleMenu<Element>(e: MouseEvent<Element>, state: MenuState) {
     e.stopPropagation();
 
     const leap = state === 'closed' ? undefined : state;
-    setLocation(leap ? `/?${qs.stringify({ leap })}` : '/');
+    push(leap ? `/?${qs.stringify({ leap })}` : '/');
   }
 
   const profileClassnames = classnames({

@@ -1,10 +1,10 @@
-import { FunctionComponent } from "preact"
+import React, { FunctionComponent } from "react"
 import { Nav } from "../components/Nav"
 import { Tile } from "../components/Tile"
 import systemUrl from '../assets/system.png'
 import goUrl from '../assets/go.png'
-import { Route } from "wouter-preact"
-import { AppInfoDialog } from "../components/AppInfoDialog"
+import { AppInfoDialog } from "../dialogs/AppInfoDialog"
+import { Route } from "react-router-dom"
 
 export const Grid: FunctionComponent = () => {
   return (
