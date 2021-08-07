@@ -2,6 +2,9 @@ import React, { useEffect } from 'react'
 import Mousetrap from 'mousetrap'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { Grid } from './pages/Grid'
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient();
 
 export function App() {
   useEffect(() => {
@@ -13,12 +16,14 @@ export function App() {
   }, [])
 
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route path="/">
-          <Grid />
-        </Route>
-      </Switch>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/">
+            <Grid />
+          </Route>
+        </Switch>
+      </BrowserRouter>
+    </QueryClientProvider>
   )
 }
