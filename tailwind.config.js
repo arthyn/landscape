@@ -1,4 +1,5 @@
 const theme = require('tailwindcss/defaultTheme');
+const colors = require('tailwindcss/colors');
 
 module.exports = {
   mode: 'jit',
@@ -11,6 +12,7 @@ module.exports = {
         white: "#FFFFFF",
         black: "#000000",
         gray: {
+          ...colors.trueGray,
           100: "#F2F2F2",
           200: "#CCCCCC",
           300: "#B3B3B3",
@@ -62,7 +64,12 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      opacity: ['hover-none']
+    },
   },
-  plugins: [require('@tailwindcss/aspect-ratio')],
+  plugins: [
+    require('@tailwindcss/aspect-ratio'),
+    require('tailwindcss-touch')()
+  ],
 }

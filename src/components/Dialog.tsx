@@ -15,25 +15,29 @@ export const Dialog: FC<DialogPrimitive.DialogOwnProps> = ({ children, ...props 
 type DialogContentComponent = Polymorphic.ForwardRefComponent<
   Polymorphic.IntrinsicElement<typeof DialogPrimitive.Content>,
   Polymorphic.OwnProps<typeof DialogPrimitive.Content> & {
+    containerClass?: string;
     showClose?: boolean;
   }
 >
 
 export const DialogContent = React.forwardRef(
-  ({ showClose = true, children, className, ...props }, forwardedRef) => (
+  ({ showClose = true, containerClass, children, className, ...props }, forwardedRef) => (
     <DialogPrimitive.Content
       as={'section'}
       className={classNames(
-        'dialog',
-        className
+        'dialog-container',
+        containerClass
       )}
       {...props}
       ref={forwardedRef}
     >
-      <div className="relative">
+      <div className={classNames(
+        'dialog',
+        className
+      )}>
         {children}
         {showClose && 
-          <DialogPrimitive.Close className="absolute -top-1 -right-1 p-2 bg-gray-100 rounded-full">
+          <DialogPrimitive.Close className="absolute top-4 right-4 sm:top-7 sm:right-7 p-2 bg-gray-100 rounded-full default-ring">
             <svg className="w-3.5 h-3.5 stroke-current text-gray-500" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M4 4L20 20" strokeWidth="3" strokeLinecap="round"/>
               <path d="M20 4L4 20" strokeWidth="3" strokeLinecap="round"/>

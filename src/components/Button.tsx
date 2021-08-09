@@ -25,7 +25,7 @@ export const Button = React.forwardRef(({
   ...props 
 }, ref) => {
   return (
-    <Comp ref={ref} {...props} className={classNames('button', variants[variant], className)}>
+    <Comp ref={ref} {...props} className={classNames('button default-ring', variants[variant], className)}>
       { children }
     </Comp>
   )
@@ -36,7 +36,7 @@ export const PillButton = React.forwardRef(({
   children,
   ...props
 }, ref) => (
-  <Button ref={ref} {...props} className={classNames('px-6 py-3 rounded-full', className)}>
+  <Button ref={ref} {...props} className={classNames('px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base rounded-full', className)}>
     { children }
   </Button>
 )) as PolymorphicButton

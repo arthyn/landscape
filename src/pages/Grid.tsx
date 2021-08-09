@@ -19,7 +19,7 @@ export const Grid: FunctionComponent = () => {
       <main className='h-full w-full flex justify-center pt-24 pb-32 relative z-0'>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 px-4 md:px-8 w-full max-w-6xl">
           {data && data.map(app => (
-            <Tile key={app.name} {...app } href={app.url} />
+            <Tile key={app.name} app={app} />
           ))}
         </div>
         <Route exact path="/app/:appId">

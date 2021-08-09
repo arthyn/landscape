@@ -31,6 +31,7 @@
     "autoprefixer": "^10.3.1",
     "postcss": "^8.3.6",
     "tailwindcss": "^2.2.7",
+    "tailwindcss-touch": "^1.0.1",
     "typescript": "^4.3.2",
     "vite": "^2.4.4"
   }

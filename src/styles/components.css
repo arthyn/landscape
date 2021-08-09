@@ -18,6 +18,10 @@
 	@apply inline-flex items-center justify-center px-4 py-2 font-semibold text-base tracking-tight rounded-lg cursor-pointer;
 }
 
+.dialog-container {
+	@apply fixed z-40 top-1/2 left-1/2 min-w-80 transform -translate-x-1/2 -translate-y-1/2;
+}
+
 .dialog {
-	@apply fixed z-40 top-1/2 left-1/2 min-w-80 p-8 bg-white rounded-3xl transform -translate-x-1/2 -translate-y-1/2;
+	@apply relative p-5 sm:p-8 bg-white rounded-3xl;
 }
