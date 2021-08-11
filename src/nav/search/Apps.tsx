@@ -20,7 +20,6 @@ export const Apps = ({ match }: AppsProps) => {
 
   useEffect(() => {
     select(`Apps by ${provider}`);
-    console.log('apps', provider)
   }, [])
 
   const preloadApp = useCallback((app: App) => {
