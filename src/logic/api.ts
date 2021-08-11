@@ -1,9 +1,18 @@
-import { apps } from "./mock-data";
+import fuzzy from 'fuzzy';
+import slugify from 'slugify';
+import { apps, providers } from "./mock-data";
 
 export type AppStatus = 'active' | 'suspended';
 
+export interface Provider {
+  shipName: string;
+  nickname?: string;
+  status?: string;
+}
+
 export interface App {
   name: string;
+  provider: string;
   description?: string;
   status: AppStatus;
   url: string;
@@ -26,12 +35,29 @@ async function fakeRequest<T>(data: T, time = 300): Promise<T> {
   })
 }
 
-export async function getApps(): Promise<App[]> {
-  return fakeRequest(apps);
+export async function getProviders(query?: string): Promise<Provider[]> {
+  const searchTexts = providers.map(p => p.shipName + (p.nickname || ''));
+  return fakeRequest(fuzzy.filter(query || '', searchTexts).map(el => providers[el.index]))
+}
+
+const stableAppList = new Map<string, App[]>();
+
+export async function getApps(dev?: string): Promise<App[]> {
+  let appList = apps;
+  
+  if (dev && !stableAppList.has(dev)) {
+    stableAppList.set(dev, apps.filter(() => !!Math.round(Math.random())))
+  }
+
+  if (dev) {
+    appList = stableAppList.get(dev) as App[];
+  }
+
+  return fakeRequest(appList);
 }
 
 export async function getApp(name: string): Promise<App | undefined> {
-  return fakeRequest(apps.find(app => app.name === name))
+  return fakeRequest(apps.find(app => slugify(app.name) === slugify(name)))
 }
 
 export async function removeApp(name: string): Promise<string> {
