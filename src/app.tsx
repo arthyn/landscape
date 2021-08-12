@@ -1,23 +1,23 @@
-import React, { useEffect } from 'react'
-import Mousetrap from 'mousetrap'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import { Grid } from './pages/Grid'
-import { QueryClient, QueryClientProvider } from 'react-query';
+import React, { useEffect } from "react";
+import Mousetrap from "mousetrap";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { Grid } from "./pages/Grid";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const queryClient = new QueryClient();
 
 export function App() {
   useEffect(() => {
-    window.name = 'grid'
+    window.name = "grid";
 
-    Mousetrap.bind(['command+/', 'ctrl+/'], () => {
-      window.open('/?leap=search', 'grid')
-    })
-  }, [])
+    Mousetrap.bind(["command+/", "ctrl+/"], () => {
+      window.open("/?leap=search", "grid");
+    });
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <BrowserRouter basename="/apps/grid">
         <Switch>
           <Route path="/">
             <Grid />
@@ -25,5 +25,5 @@ export function App() {
         </Switch>
       </BrowserRouter>
     </QueryClientProvider>
-  )
+  );
 }

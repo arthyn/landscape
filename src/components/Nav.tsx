@@ -76,13 +76,19 @@ export const Nav: FunctionComponent = () => {
   const menuClassnames = classnames({
     'z-40 flex': isOpen,
     'hidden': !isOpen,
-  })
+  });
+
+  const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if(e.key === 'Enter' && inputRef.current) {
+      push(`/install/${inputRef.current.value}`)
+    }
+  }
   
   return (
     <menu className="w-full max-w-3xl flex p-0 px-4 md:px-8">
       <button onClick={(e) => toggleMenu(e, 'profile')} className={`${profileClassnames} relative flex-none circle-button mr-2 bg-avatar-britney`} />
       <button onClick={(e) => toggleMenu(e, 'notifications')} className={`${notificationsClassnames} relative flex-none circle-button mr-2 bg-blue-400 text-white`}>3</button>
-      <input ref={inputRef} onClick={(e) => toggleMenu(e, 'search')} type='text' className={`${searchClassnames} relative rounded-full w-full pl-4`} placeholder="Search Landscape" />
+      <input onKeyPress={onKeyPress} ref={inputRef} onClick={(e) => toggleMenu(e, 'search')} type='text' className={`${searchClassnames} relative rounded-full w-full pl-4`} placeholder="Search Landscape" />
       
       <div className={`${lightboxClassnames}  pointer-events-none bg-gray-200 fixed top-0 left-0 w-screen h-screen opacity-30`} />
       
