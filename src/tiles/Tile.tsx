@@ -1,11 +1,12 @@
 import classNames from 'classnames';
 import React, { FunctionComponent } from 'react'
 import { darken, hsla, lighten, parseToHsla, readableColorIsBlack } from 'color2k';
-import { App } from '../logic/api'
 import { TileMenu } from './TileMenu'
+import { Docket } from '../state/docket';
 
 type TileProps = {
-  app: App;
+  docket: Docket;
+  desk: string;
 };
 
 function getMenuColor(color: string, lightText: boolean, active: boolean): string {
@@ -15,28 +16,31 @@ function getMenuColor(color: string, lightText: boolean, active: boolean): strin
   return lightText ? lighten(satAdjustedColor, .10) : darken(satAdjustedColor, .10);
 }
 
-export const Tile: FunctionComponent<TileProps> = ({ app }) => {
-  const { color, light, name, img, status } = app;
-  const active = status === 'active';
+export const Tile: FunctionComponent<TileProps> = ({ docket, desk }) => {
+  const { title, base } = docket;
+  const light = false;
+  const img = undefined;
+  const color = `#${docket.color.slice(2).replace('.', '')}`.toUpperCase();
+  const active = true // status === 'active';
   const lightText = light || !readableColorIsBlack(color);
   const menuColor = getMenuColor(color, lightText, active);
   const suspendColor = 'rgb(220,220,220)'
 
   return(
     <a
-      href={active ? '#' : undefined}
-      target={name} 
+      href={active ? `/apps/${base}/` : undefined}
+      target={base} 
       className={classNames('group relative font-semibold aspect-w-1 aspect-h-1 rounded-xl default-ring', !active && 'cursor-default')} style={{backgroundColor: active ? color || 'purple' : suspendColor }}
     >
       <div>
         <TileMenu
-          app={app}
+          desk={desk}
           menuColor={menuColor}
           lightText={lightText}
           className="absolute z-10 top-2.5 right-2.5 sm:top-4 sm:right-4 opacity-0 hover-none:opacity-100 focus:opacity-100 group-hover:opacity-100" 
         />
         <div className="h4 absolute bottom-4 left-4 lg:bottom-8 lg:left-8">
-          <h3 className={`${lightText && active ? 'text-gray-200' : 'text-gray-800'}  mix-blend-hard-light`}>{name}</h3>
+          <h3 className={`${lightText && active ? 'text-gray-200' : 'text-gray-800'}  mix-blend-hard-light`}>{title}</h3>
           {!active && 
             <span className="text-gray-400">Suspended</span>
           }

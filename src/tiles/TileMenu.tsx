@@ -3,11 +3,11 @@ import type * as Polymorphic from '@radix-ui/react-polymorphic';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import { App, toggleAppStatus } from '../logic/api';
+import { toggleAppStatus } from '../logic/api';
 import { useMutation, useQueryClient } from 'react-query';
 
 export interface TileMenuProps {
-  app: App;
+  desk: string;
   lightText: boolean;
   menuColor: string;
   className?: string;
@@ -32,8 +32,7 @@ const Item = React.forwardRef(({ children, ...props }, ref) => (
   </DropdownMenu.Item>
 )) as ItemComponent
 
-export const TileMenu = ({ app, menuColor, lightText, className }: TileMenuProps) => {
-  const { name, provider, status } = app;
+export const TileMenu = ({ desk, menuColor, lightText, className }: TileMenuProps) => {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const { mutate } = useMutation((id: string) => toggleAppStatus(id), {
@@ -54,7 +53,7 @@ export const TileMenu = ({ app, menuColor, lightText, className }: TileMenuProps
           className
         )}
         style={menuBg}
-        onMouseOver={() => queryClient.setQueryData(['apps', name], app)}
+        //onMouseOver={() => queryClient.setQueryData(['apps', name], app)}
       >
         <MenuIcon className={classNames('w-4 h-4 mix-blend-hard-light', lightText && 'text-gray-100')} />
         <span className="sr-only">Menu</span>
@@ -62,13 +61,17 @@ export const TileMenu = ({ app, menuColor, lightText, className }: TileMenuProps
 
       <DropdownMenu.Content align="start" alignOffset={-32} sideOffset={4} onCloseAutoFocus={(e) => e.preventDefault()} className={classNames('dropdown font-semibold', lightText ? 'text-gray-100' : 'text-gray-800')} style={menuBg}>
         <DropdownMenu.Group className="space-y-4">
-          <Item as={Link} to={`/leap/search/${provider}/apps/${name.toLowerCase()}`} onSelect={(e) => { e.preventDefault(); setTimeout(() => setOpen(false), 0) }}>App Info</Item>
+          {/* 
+            TODO: revisit with Liam
+            <Item as={Link} to={`/leap/search/${provider}/apps/${name.toLowerCase()}`} onSelect={(e) => { e.preventDefault(); setTimeout(() => setOpen(false), 0) }}>App Info</Item> 
+          */}
+          <Item as={Link} to={`/app/${desk}`} onSelect={(e) => { e.preventDefault(); setTimeout(() => setOpen(false), 0) }}>App Info</Item>
         </DropdownMenu.Group>
         <DropdownMenu.Separator className="-mx-4 my-2 border-t-2 border-solid border-gray-500 mix-blend-soft-light"/>
         <DropdownMenu.Group className="space-y-4">
-          {active && <Item as={Link} to={`/app/${name}/suspend`} onSelect={(e) => { e.preventDefault(); setTimeout(() => setOpen(false), 0) }}>Suspend App</Item>}
-          {!active && <Item onSelect={() => mutate(name)}>Resume App</Item>}
-          <Item as={Link} to={`/app/${name}/remove`} onSelect={(e) => { e.preventDefault(); setTimeout(() => setOpen(false), 0) }}>Remove App</Item>
+          {active && <Item as={Link} to={`/app/${desk}/suspend`} onSelect={(e) => { e.preventDefault(); setTimeout(() => setOpen(false), 0) }}>Suspend App</Item>}
+          {!active && <Item onSelect={() => mutate(desk)}>Resume App</Item>}
+          <Item as={Link} to={`/app/${desk}/remove`} onSelect={(e) => { e.preventDefault(); setTimeout(() => setOpen(false), 0) }}>Remove App</Item>
         </DropdownMenu.Group>
         <DropdownMenu.Arrow className="w-4 h-[10px] fill-current -translate-x-10" style={{ color: menuColor }}/>
       </DropdownMenu.Content>
