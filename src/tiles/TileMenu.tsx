@@ -33,7 +33,7 @@ const Item = React.forwardRef(({ children, ...props }, ref) => (
 )) as ItemComponent
 
 export const TileMenu = ({ app, menuColor, lightText, className }: TileMenuProps) => {
-  const { name, status } = app;
+  const { name, provider, status } = app;
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const { mutate } = useMutation((id: string) => toggleAppStatus(id), {
@@ -60,9 +60,9 @@ export const TileMenu = ({ app, menuColor, lightText, className }: TileMenuProps
         <span className="sr-only">Menu</span>
       </DropdownMenu.Trigger>
 
-      <DropdownMenu.Content align="start" alignOffset={-32} sideOffset={4} onCloseAutoFocus={(e) => e.preventDefault()} className={classNames('min-w-[200px] p-4 space-y-4 font-semibold rounded-xl', lightText ? 'text-gray-100' : 'text-gray-800')} style={menuBg}>
+      <DropdownMenu.Content align="start" alignOffset={-32} sideOffset={4} onCloseAutoFocus={(e) => e.preventDefault()} className={classNames('dropdown font-semibold', lightText ? 'text-gray-100' : 'text-gray-800')} style={menuBg}>
         <DropdownMenu.Group className="space-y-4">
-          <Item as={Link} to={`/app/${name}`} onSelect={(e) => { e.preventDefault(); setTimeout(() => setOpen(false), 0) }}>App Info</Item>
+          <Item as={Link} to={`/leap/search/${provider}/apps/${name.toLowerCase()}`} onSelect={(e) => { e.preventDefault(); setTimeout(() => setOpen(false), 0) }}>App Info</Item>
         </DropdownMenu.Group>
         <DropdownMenu.Separator className="-mx-4 my-2 border-t-2 border-solid border-gray-500 mix-blend-soft-light"/>
         <DropdownMenu.Group className="space-y-4">
