@@ -5,7 +5,6 @@ import { useQuery, useQueryClient } from 'react-query';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import slugify from 'slugify';
 import { ShipName } from '../../components/ShipName';
-import { App, getApps } from '../../logic/api';
 import { useNavStore } from '../Nav';
 
 type AppsProps = RouteComponentProps<{ provider: string; }>

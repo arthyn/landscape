@@ -1,5 +1,5 @@
 import React from 'react';
-import _ from 'lodash';
+import { capitalize } from 'lodash-es';
 
 interface AttributeProps {
   attr: string;
@@ -9,7 +9,7 @@ interface AttributeProps {
 
 export const Attribute = ({ attr, children, title }: AttributeProps) => (
   <div className="h4">
-    <h2 className="mb-2 text-gray-500">{ title || _.capitalize(attr) }</h2>
+    <h2 className="mb-2 text-gray-500">{ title || capitalize(attr) }</h2>
     <p className="font-mono">{ children }</p>
   </div>
 )
