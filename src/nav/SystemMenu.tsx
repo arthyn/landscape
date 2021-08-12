@@ -23,7 +23,7 @@ export const SystemMenu = ({ open, setOpen, className, showOverlay = false }: Sy
 
     setTimeout(() => {
       setCopied(false);
-    }, 750);
+    }, 1250);
   }, [])
 
   return (
@@ -40,7 +40,7 @@ export const SystemMenu = ({ open, setOpen, className, showOverlay = false }: Sy
           <span className="sr-only">System Menu</span>
         </DropdownMenu.Trigger>
 
-        <DropdownMenu.Content sideOffset={12} className="dropdown min-w-64 p-6 font-semibold text-gray-500 bg-white">
+        <DropdownMenu.Content onCloseAutoFocus={(e) => e.preventDefault() } sideOffset={12} className="dropdown min-w-64 p-6 font-semibold text-gray-500 bg-white">
           <DropdownMenu.Group className="space-y-6">
             <DropdownMenu.Item as={Link} to="/leap/system-preferences" className="flex items-center space-x-2 default-ring ring-offset-2 rounded" onSelect={(e) => { e.preventDefault(); setTimeout(() => setOpen(false), 0) }}>
               <span className="w-5 h-5 bg-gray-100 rounded-full"></span>
@@ -50,9 +50,12 @@ export const SystemMenu = ({ open, setOpen, className, showOverlay = false }: Sy
               <span className="w-5 h-5 bg-gray-100 rounded-full"></span>
               <span className="h4">Help and Support</span>
             </DropdownMenu.Item>
-            <DropdownMenu.Item as="button" className="inline-flex items-center py-2 px-3 h4 font-mono text-black bg-gray-100 rounded default-ring" onSelect={copyHash}>
-              {!copied && 'fjuhl'}
-              {copied && 'copied!'}
+            <DropdownMenu.Item as="button" className="inline-flex items-center py-2 px-3 h4 text-black bg-gray-100 rounded default-ring" onSelect={copyHash}>
+              <span className="sr-only">Base Hash</span>
+              <code>
+                {!copied && <span aria-label="f-j-u-h-l">fjuhl</span>}
+                {copied && 'copied!'}
+              </code>
             </DropdownMenu.Item>
           </DropdownMenu.Group>
         </DropdownMenu.Content>

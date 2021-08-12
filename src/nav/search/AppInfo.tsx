@@ -6,6 +6,7 @@ import { PillButton } from '../../components/Button';
 import clipboardCopy from 'clipboard-copy';
 import { useNavStore } from '../Nav';
 import { useEffect } from 'react';
+import { ShipName } from '../../components/ShipName';
 
 interface AttributeProps {
   attr: string;
@@ -36,7 +37,7 @@ export const AppInfo = ({ match }: AppInfoProps) => {
   });
 
   useEffect(() => {
-    select(`Apps by ${provider}: ${data?.name}`)
+    select(<>Apps by <ShipName name={provider} className="font-mono" />: {data?.name}</>)
   }, [data?.name])
 
   const copyApp = useCallback(async () => {

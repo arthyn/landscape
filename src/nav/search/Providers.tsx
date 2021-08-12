@@ -2,6 +2,7 @@ import { debounce } from 'lodash-es';
 import React, { useCallback, useEffect } from 'react'
 import { useQuery } from 'react-query';
 import { Link, RouteComponentProps } from 'react-router-dom';
+import { ShipName } from '../../components/ShipName';
 import { getProviders } from '../../logic/api';
 import { useNavStore } from '../Nav';
 
@@ -36,22 +37,28 @@ export const Providers = ({ match, history }: ProvidersProps) => {
   }, [searchInput])
 
   return (
-    <div className="dialog-inner-container md:px-6 md:py-8 h4 text-gray-400">
-      <div>
+    <div className="dialog-inner-container md:px-6 md:py-8 h4 text-gray-400" aria-live="polite">
+      <div id="providers">
         <h2 className="mb-3">Searching Software Providers</h2>
         <p>{count} result{count === 1 ? '' : 's'}</p>
       </div>
-      {data && data.map(p => (
-        <Link key={p.shipName} to={`${match?.path.replace(':provider', p.shipName)}/apps`} className="flex items-center space-x-3 default-ring ring-offset-2 rounded-lg">
-          <div className="flex-none relative w-12 h-12 bg-black rounded-lg">
-            {/* TODO: Handle sigils */}
-          </div>
-          <div className="flex-1 text-black">
-            <h3 className="font-mono">{ p.nickname || p.shipName }</h3>
-            { p.status && <p className="font-normal">{ p.status }</p>}
-          </div>
-        </Link>
-      ))}
+      {data && 
+        <ul className="space-y-8" aria-labelledby="providers">
+          {data.map(p => (
+            <li key={p.shipName}>
+              <Link to={`${match?.path.replace(':provider', p.shipName)}/apps`} className="flex items-center space-x-3 default-ring ring-offset-2 rounded-lg">
+                <div className="flex-none relative w-12 h-12 bg-black rounded-lg">
+                  {/* TODO: Handle sigils */}
+                </div>
+                <div className="flex-1 text-black">
+                  <p className="font-mono">{ p.nickname || <ShipName name={p.shipName} /> }</p>
+                  { p.status && <p className="font-normal">{ p.status }</p>}
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      }
       <p>That's it!</p>
     </div>
   )

@@ -12,6 +12,7 @@ import { Help } from "./Help"
 import create from "zustand"
 import { ChangeEvent } from "react"
 import { useEffect } from "react"
+import { Cross } from "../components/icons/Cross"
 
 export type MenuState = 
   | 'closed'
@@ -27,15 +28,15 @@ interface NavProps {
 interface NavStore {
   searchInput: string;
   setSearchInput: (input: string) => void;
-  selection: string | null;
-  select: (selection: string | null, input?: string) => void;
+  selection: React.ReactNode;
+  select: (selection: React.ReactNode, input?: string) => void;
 }
 
 export const useNavStore = create<NavStore>((set) => ({
   searchInput: '',
   setSearchInput: (input: string) => set({ searchInput: input }),
   selection: null,
-  select: (selection: string | null, input?: string) => set({ searchInput: input || '', selection })
+  select: (selection: React.ReactNode, input?: string) => set({ searchInput: input || '', selection })
 }))
 
 export function createNextPath(current: string, nextPart?: string): string {
@@ -55,6 +56,10 @@ export function createNextPath(current: string, nextPart?: string): string {
 export function createPreviousPath(current: string): string {
   const parts = current.split('/');
   parts.pop();
+  
+  if (parts[parts.length - 1] === 'leap') {
+    parts.push('search')
+  }
 
   return parts.join('/')
 }
@@ -93,15 +98,20 @@ export const Nav: FunctionComponent<NavProps> = ({ menu = 'closed' }) => {
     inputRef.current?.focus();
   }, [selection])
 
-  function toggleMenu(state: MenuState) {
-    console.log({ menu, state })
-    if (selection || menu === state) {
+  const toggleSearch = useCallback(() => {
+    if (selection || menu === 'search') {
       return;
     }
 
-    const leap = state === 'closed' ? undefined : state;
-    push(leap ? `/leap/${leap}` : '/');
-  }
+    push('/leap/search');
+  }, [selection, menu])
+
+  const onDialogClose = useCallback((open: boolean) => {
+    if (!open) {
+      select(null);
+      push('/');
+    }
+  }, [])
 
   const onDialogKey = useCallback((e: KeyboardEvent<HTMLDivElement>) => {
     if (!selection || searchInput) {
@@ -124,7 +134,7 @@ export const Nav: FunctionComponent<NavProps> = ({ menu = 'closed' }) => {
       return;
     }
 
-    toggleMenu('search')
+    toggleSearch();
   }, [])
 
   const onChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -140,11 +150,11 @@ export const Nav: FunctionComponent<NavProps> = ({ menu = 'closed' }) => {
           <SystemMenu showOverlay open={systemMenuOpen} setOpen={setSystemMenuOpen} className={classNames('relative z-50 flex-none', eitherOpen ? 'bg-white' : 'bg-gray-100')} />
         }
         <Link to="/leap/notifications" className="relative z-50 flex-none circle-button bg-blue-400 text-white default-ring">3</Link>
-        <input onClick={() => toggleMenu('search')} onFocus={onFocus} type='text' className="relative z-50 rounded-full w-full pl-4 h4 bg-gray-100 default-ring" placeholder="Search Landscape" />
+        <input onClick={toggleSearch} onFocus={onFocus} type='text' className="relative z-50 rounded-full w-full pl-4 h4 bg-gray-100 default-ring" placeholder="Search Landscape" />
       </div>
       
-      <Dialog open={isOpen} onOpenChange={(open) => !open && push('/')}>
-        <DialogContent onOpenAutoFocus={onOpen} className="fixed top-0 left-1/2 w-full max-w-3xl px-4 text-gray-400 -translate-x-1/2 outline-none">
+      <Dialog open={isOpen} onOpenChange={onDialogClose}>
+        <DialogContent onOpenAutoFocus={onOpen} className="fixed top-0 left-[calc(50%-7.5px)] w-[calc(100%-15px)] max-w-3xl px-4 text-gray-400 -translate-x-1/2 outline-none">
           <div tabIndex={-1} onKeyDown={onDialogKey}>
             <header className="flex my-6 space-x-2">
               <SystemMenu open={systemMenuOpen} setOpen={setSystemMenuOpen} className={classNames('relative z-50 flex-none', eitherOpen ? 'bg-white' : 'bg-gray-100')} />
@@ -158,10 +168,16 @@ export const Nav: FunctionComponent<NavProps> = ({ menu = 'closed' }) => {
                   placeholder={selection ? '' : 'Search Landscape'} 
                   className="flex-1 w-full h-full px-2 h4 rounded-full bg-transparent outline-none"
                   value={searchInput} 
-                  onClick={() => toggleMenu('search')} 
+                  onClick={toggleSearch} 
                   onFocus={onFocus} 
                   onChange={onChange}
                 />
+                { (selection || searchInput) &&
+                  <Link to="/" className="circle-button w-8 h-8 text-gray-400 bg-gray-100 default-ring" onClick={() => select(null)}>
+                    <Cross className="w-3 h-3 fill-current" />
+                    <span className="sr-only">Close</span>
+                  </Link>
+                }
               </div>
             </header>
             <div className="grid grid-rows-[fit-content(calc(100vh-7.5rem))] bg-white rounded-3xl overflow-hidden">

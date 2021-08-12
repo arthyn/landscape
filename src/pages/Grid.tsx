@@ -16,7 +16,7 @@ export const Grid: FunctionComponent<GridProps> = ({ match }) => {
   const { data } = useQuery(['apps'], () => getApps())
   return (
     <div className="flex flex-col">
-      <header className="sticky top-0 left-0 z-30 flex justify-center w-screen bg-white">
+      <header className="sticky top-0 left-0 z-30 flex justify-center w-full bg-white">
         <Nav menu={match.params.menu} />
       </header>
 
