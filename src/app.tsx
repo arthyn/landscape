@@ -31,10 +31,11 @@ const AppRoutes = () => {
 }
 
 export function App() {
+  const base = import.meta.env.MODE === 'mock' ? undefined : '/apps/grid';
 
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter basename="/apps/grid">
+      <BrowserRouter basename={base}>
         <AppRoutes />
       </BrowserRouter>
     </QueryClientProvider>

@@ -5,7 +5,7 @@ import reactRefresh from '@vitejs/plugin-react-refresh'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => ({
-  base: '/apps/grid/',
+  base: mode === 'mock' ? undefined : '/apps/grid/',
   server: mode === 'mock' ? undefined : {
     proxy: {
       '^((?!\/apps\/grid).)*$': {
