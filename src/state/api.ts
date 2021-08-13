@@ -1,6 +1,5 @@
 import Urbit from '@urbit/http-api';
-import { useMockData } from '../main';
-const api = useMockData ? {
+const api = import.meta.env.MODE === 'mock' ? {
   poke: () => {},
   subscribe: () => {},
   subscribeOnce: () => {}

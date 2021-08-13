@@ -127,7 +127,6 @@ export const Nav: FunctionComponent<NavProps> = ({ menu = 'closed' }) => {
   }, [selection, searchInput, location.pathname]);
 
   const onFocus = useCallback((e: FocusEvent<HTMLInputElement>) => {
-    debugger;
     //refocusing tab with input focused is false trigger
     const windowFocus = e.nativeEvent.currentTarget === document.body;
     if (windowFocus) {

@@ -1,4 +1,3 @@
-const theme = require('tailwindcss/defaultTheme');
 const colors = require('tailwindcss/colors');
 
 module.exports = {
@@ -60,7 +59,7 @@ module.exports = {
           "monospace",
         ],
       },
-      minWidth: theme.spacing,
+      minWidth: theme => theme('spacing'),
     },
   },
   variants: {

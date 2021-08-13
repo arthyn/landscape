@@ -24,6 +24,7 @@ export const Button = React.forwardRef(({
   className,
   ...props 
 }, ref) => {
+  debugger;
   return (
     <Comp ref={ref} {...props} className={classNames('button default-ring', variants[variant], className)}>
       { children }

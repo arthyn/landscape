@@ -17,12 +17,9 @@ function getMenuColor(color: string, lightText: boolean, active: boolean): strin
 }
 
 export const Tile: FunctionComponent<TileProps> = ({ docket, desk }) => {
-  const { title, base } = docket;
-  const light = false;
-  const img = undefined;
-  const color = `#${docket.color.slice(2).replace('.', '')}`.toUpperCase();
-  const active = true // status === 'active';
-  const lightText = light || !readableColorIsBlack(color);
+  const { title, base, color, img, status } = docket;
+  const active = status === 'active';
+  const lightText = !readableColorIsBlack(color);
   const menuColor = getMenuColor(color, lightText, active);
   const suspendColor = 'rgb(220,220,220)'
 
@@ -35,6 +32,7 @@ export const Tile: FunctionComponent<TileProps> = ({ docket, desk }) => {
       <div>
         <TileMenu
           desk={desk}
+          active={active}
           menuColor={menuColor}
           lightText={lightText}
           className="absolute z-10 top-2.5 right-2.5 sm:top-4 sm:right-4 opacity-0 hover-none:opacity-100 focus:opacity-100 group-hover:opacity-100" 
@@ -45,10 +43,8 @@ export const Tile: FunctionComponent<TileProps> = ({ docket, desk }) => {
             <span className="text-gray-400">Suspended</span>
           }
         </div>
-        {
-          img
-            ? <img className="absolute top-1/2 left-1/2 h-[40%] w-[40%] object-contain transform -translate-x-1/2 -translate-y-1/2" src={ img } />
-            : null
+        { img && 
+          <img className="absolute top-1/2 left-1/2 h-[40%] w-[40%] object-contain transform -translate-x-1/2 -translate-y-1/2" src={ img } />
         }
       </div>
     </a>

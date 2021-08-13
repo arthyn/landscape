@@ -3,10 +3,10 @@ import React, { useCallback, useEffect } from 'react'
 import { useQuery } from 'react-query';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { ShipName } from '../../components/ShipName';
-import { getProviders } from '../../logic/api';
+import { fetchProviders, providersKey } from '../../state/docket';
 import { useNavStore } from '../Nav';
 
-type ProvidersProps = RouteComponentProps<{ provider: string; }>
+type ProvidersProps = RouteComponentProps<{ ship: string; }>
 
 export const Providers = ({ match, history }: ProvidersProps) => {
   const {
@@ -15,8 +15,8 @@ export const Providers = ({ match, history }: ProvidersProps) => {
   } = useNavStore(state => ({ searchInput: state.searchInput, select: state.select }));
   const { push } = history;
   const { path } = match;
-  const provider = match?.params.provider;
-  const { data } = useQuery(['providers', provider], () => getProviders(provider), {
+  const provider = match?.params.ship;
+  const { data } = useQuery(providersKey([provider]), () => fetchProviders(provider), {
     enabled: !!provider,
     keepPreviousData: true
   });
@@ -27,7 +27,7 @@ export const Providers = ({ match, history }: ProvidersProps) => {
   }, [])
 
   const handleSearch = useCallback(debounce((input: string) => {
-    push(match?.path.replace(':provider', input.trim()))
+    push(match?.path.replace(':ship', input.trim()))
   }, 300), [path]);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export const Providers = ({ match, history }: ProvidersProps) => {
         <ul className="space-y-8" aria-labelledby="providers">
           {data.map(p => (
             <li key={p.shipName}>
-              <Link to={`${match?.path.replace(':provider', p.shipName)}/apps`} className="flex items-center space-x-3 default-ring ring-offset-2 rounded-lg">
+              <Link to={`${match?.path.replace(':ship', p.shipName)}/apps`} className="flex items-center space-x-3 default-ring ring-offset-2 rounded-lg">
                 <div className="flex-none relative w-12 h-12 bg-black rounded-lg">
                   {/* TODO: Handle sigils */}
                 </div>

@@ -1,39 +1,27 @@
 import clipboardCopy from "clipboard-copy";
-import { useState, useEffect, useCallback } from "react";
+import { useCallback } from "react";
+import { useMutation, useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import useDocketState, { Treaty } from "../state/docket";
+import { installDocket, requestTreaty, treatyKey } from "../state/docket";
 
 export function useTreaty() {
   const { ship, desk } = useParams<{ ship: string; desk: string }>();
-  const {
-    installDocket,
-    request
-  } = useDocketState(state => ({ 
-    request: state.request,
-    installDocket: state.installDocket
-  }))
-  const [treaty, setTreaty] = useState<undefined | Treaty>(undefined);
-  const [installing, setInstalling] = useState(false);
-
-  useEffect(() => {
-    (async () => {
-      setTreaty(await request(ship, desk));
-    })();
-  }, [ship, desk]);
+  const { data: treaty } = useQuery(treatyKey([ship, desk]), () => requestTreaty(ship, desk));
+  const { mutate, ...installStatus } = useMutation(() => installDocket(ship, desk))
 
   const copyApp = useCallback(async () => {
     clipboardCopy(`${ship}/${desk}`);
   }, [ship, desk]);
 
-  const installApp = () => {
-    installDocket(ship, desk);
-    setInstalling(true);
-  };
+  const installApp = useCallback(() => {
+    mutate();
+  }, [])
 
   return {
     ship,
+    desk,
     treaty,
-    installing,
+    installStatus,
     installApp,
     copyApp
   }

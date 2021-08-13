@@ -3,13 +3,14 @@ import type * as Polymorphic from '@radix-ui/react-polymorphic';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import { toggleAppStatus } from '../logic/api';
 import { useMutation, useQueryClient } from 'react-query';
+import { chargesKey, toggleDocket } from '../state/docket';
 
 export interface TileMenuProps {
   desk: string;
   lightText: boolean;
   menuColor: string;
+  active: boolean;
   className?: string;
 }
 
@@ -32,17 +33,16 @@ const Item = React.forwardRef(({ children, ...props }, ref) => (
   </DropdownMenu.Item>
 )) as ItemComponent
 
-export const TileMenu = ({ desk, menuColor, lightText, className }: TileMenuProps) => {
+export const TileMenu = ({ desk, active, menuColor, lightText, className }: TileMenuProps) => {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
-  const { mutate } = useMutation((id: string) => toggleAppStatus(id), {
+  const { mutate } = useMutation(() => toggleDocket(desk), {
     onSuccess: () => {
-      queryClient.invalidateQueries(['apps'])
+      queryClient.invalidateQueries(chargesKey())
     }
   })
 
   const menuBg = { backgroundColor: menuColor };
-  const active = status === 'active';
 
   return (
     <DropdownMenu.Root open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
@@ -70,7 +70,7 @@ export const TileMenu = ({ desk, menuColor, lightText, className }: TileMenuProp
         <DropdownMenu.Separator className="-mx-4 my-2 border-t-2 border-solid border-gray-500 mix-blend-soft-light"/>
         <DropdownMenu.Group className="space-y-4">
           {active && <Item as={Link} to={`/app/${desk}/suspend`} onSelect={(e) => { e.preventDefault(); setTimeout(() => setOpen(false), 0) }}>Suspend App</Item>}
-          {!active && <Item onSelect={() => mutate(desk)}>Resume App</Item>}
+          {!active && <Item onSelect={() => mutate()}>Resume App</Item>}
           <Item as={Link} to={`/app/${desk}/remove`} onSelect={(e) => { e.preventDefault(); setTimeout(() => setOpen(false), 0) }}>Remove App</Item>
         </DropdownMenu.Group>
         <DropdownMenu.Arrow className="w-4 h-[10px] fill-current -translate-x-10" style={{ color: menuColor }}/>

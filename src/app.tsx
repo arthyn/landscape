@@ -4,7 +4,13 @@ import { BrowserRouter, Switch, Route, useHistory } from 'react-router-dom'
 import { Grid } from './pages/Grid'
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-export const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false
+    }
+  }
+});
 
 const AppRoutes = () => {
   const { push } = useHistory();
