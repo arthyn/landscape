@@ -5,6 +5,7 @@
     "dev": "vite",
     "mock": "vite --mode mock",
     "build:mock": "tsc && vite --mode mock build",
+    "build:profile": "tsc && vite --mode profile build",
     "build": "tsc && vite build",
     "serve": "vite preview"
   },

@@ -13,7 +13,7 @@ export default defineConfig(({ command, mode }) => ({
       }
     }
   },
-  build: {
+  build: mode !== 'profile' ? undefined : {
     rollupOptions: {
       plugins: [
         analyze({
