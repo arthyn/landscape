@@ -4,8 +4,8 @@
   "scripts": {
     "dev": "vite",
     "mock": "vite --mode mock",
-    "build:mock": "tsc && vite --mode mock build",
-    "build:profile": "tsc && vite --mode profile build",
+    "build:mock": "tsc && vite build --mode mock",
+    "build:profile": "tsc && vite build --mode profile",
     "build": "tsc && vite build",
     "serve": "vite preview"
   },
